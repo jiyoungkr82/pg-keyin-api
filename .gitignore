@@ -1,0 +1,5 @@
+data/dbconfig.php
+data/cache/
+data/session/
+.env
+*.log
