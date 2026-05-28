@@ -1,0 +1,80 @@
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f3f4f6;
+    color: #111;
+}
+.wrap {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 24px 16px 40px;
+}
+h1, h2 { margin: 0 0 8px; font-size: 1.35rem; }
+.sub { color: #666; margin: 0 0 20px; font-size: 0.95rem; }
+.alert {
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+}
+.alert-warn { background: #fff3cd; border: 1px solid #ffeeba; }
+.alert-error { background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; }
+fieldset {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin: 0 0 16px;
+    background: #fff;
+}
+legend { padding: 0 8px; font-weight: 600; }
+label { display: block; margin-bottom: 12px; }
+label span.lbl { display: block; margin-bottom: 4px; font-size: 14px; }
+.req { color: #c00; }
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+}
+.row { display: flex; gap: 12px; }
+.row label { flex: 1; }
+.row label.wide { flex: 2; }
+.btn {
+    display: inline-block;
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+}
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-secondary { background: #f3f4f6; color: #111; }
+.result-box {
+    border-radius: 12px;
+    padding: 28px 24px;
+    text-align: center;
+    margin-bottom: 24px;
+}
+.result-box.ok { background: #ecfdf5; border: 1px solid #a7f3d0; }
+.result-box.fail { background: #fef2f2; border: 1px solid #fecaca; }
+.result-icon { font-size: 48px; line-height: 1; }
+.result-box.ok .result-icon { color: #047857; }
+.result-box.fail .result-icon { color: #b91c1c; }
+table.detail { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; }
+table.detail th, table.detail td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+    font-size: 15px;
+}
+table.detail th { width: 38%; color: #666; font-weight: 500; }
+.actions { display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; }
+.actions .btn { flex: 1; min-width: 140px; }
+.hint { font-size: 13px; color: #666; margin: 12px 0; }

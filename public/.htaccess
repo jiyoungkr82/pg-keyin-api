@@ -1,0 +1,5 @@
+# config, src 디렉터리 직접 접근 차단 (Apache)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(config|src|storage|sql)(/|$) - [F,L]
+</IfModule>
