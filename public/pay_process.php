@@ -45,12 +45,43 @@ if ($validated['cert_no'] !== '') {
     $payload['cert_no'] = $validated['cert_no'];
 }
 
+// LOG 1. 결제 시도 로그 기록 (INFO)
+Logger::info("결제 요청 시작 - 구매자: {$validated['buyer_name']}, 금액: {$validated['amount']}");
+
 $result = $api->pay($payload);
 
 $isSuccess = !empty($result['success']);
 $data = isset($result['data']) && is_array($result['data']) ? $result['data'] : [];
 
+// LOG 2. 결제 금액 위변조 검증 (가장 중요)
+if ($isSuccess) {
+    $requestedAmount = (int)$validated['amount'];
+    $approvedAmount = (int)($data['amount'] ?? 0);
+
+    if ($requestedAmount !== $approvedAmount) {
+        $isSuccess = false;
+        $apiStatus = 'failed';
+        $result['message'] = "결제 금액 위변조 의심 (요청: {$requestedAmount}원 / 승인: {$approvedAmount}원)";
+        
+        // **중요** 금액 불일치는 치명적인 해킹 시도일 수 있으므로 ERROR 로그 기록
+        Logger::error("금액 검증 실패 오류 발생!", [
+            'order_no' => $data['order_no'] ?? 'unknown',
+            'requested' => $requestedAmount,
+            'approved' => $approvedAmount
+        ]);
+        
+        // 필요 시 여기서 PG사 자동 취소(Cancel) API를 호출하는 로직이 추가되어야 안전합니다.
+    }
+}
+
 $apiStatus = $isSuccess ? 'approved' : (isset($data['status']) ? (string)$data['status'] : 'failed');
+
+// LOG 3. 결제 결과에 따른 차등 로그 기록
+if ($isSuccess) {
+    Logger::info("결제 성공 승인 - 주문번호: {$data['order_no']}, 승인번호: {$data['approval_number']}");
+} else {
+    Logger::warn("결제 승인 실패 - 코드: {$result['error_code']}, 사유: {$result['message']}");
+}
 
 try {
     $paymentId = PaymentRepository::insert([
@@ -67,6 +98,12 @@ try {
         'mb_id' => '',
     ]);
 } catch (Throwable $e) {
+    // LOG 4. DB 저장 실패는 시스템 다운 수준의 에러이므로 CRITICAL/ERROR 로그 기록
+    Logger::error("결제 완료 후 DB 저장 실패 (돈은 나갔는데 DB 기록 안됨!): " . $e->getMessage(), [
+        'order_no' => $data['order_no'] ?? '',
+        'approval_number' => $data['approval_number'] ?? ''
+    ]);
+    
     flash_set('error', 'DB 저장 오류: '.$e->getMessage());
     keyin_redirect('pay.php');
 }
