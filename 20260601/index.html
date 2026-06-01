@@ -107,13 +107,57 @@
 
 <script>
 document.getElementById('payForm').addEventListener('submit', function (e) {
-    // 순수 HTML 테스트를 위해 실제 전송(action)되는 것을 잠시 방지하려면 아래 주석(#)을 해제하세요.
-    // e.preventDefault(); 
+    // 1. [필수] 서버로 데이터가 그냥 넘어가기 전에 먼저 전송을 차단 (유효성 체크를 위함)
+    e.preventDefault();
+
+    // 2. 유효성 체크 대상 입력값 가져오기
+    var amount = document.getElementsByName('amount')[0].value;
+    var goodsName = document.getElementsByName('goods_name')[0].value.trim();
+    var buyerName = document.getElementsByName('buyer_name')[0].value.trim();
+    var cardNo = document.getElementsByName('card_no')[0].value.trim();
+    var expireYymm = document.getElementsByName('expire_yymm')[0].value.trim();
     
+    // 금액 체크 (100원 이상인지 확인)
+    if (!amount || parseInt(amount) < 100) {
+        alert('결제금액은 100원 이상이어야 합니다.');
+        return false;
+    }
+
+    // 상품명 빈값 체크
+    if (goodsName === '') {
+        alert('상품명을 입력해 주세요.');
+        return false;
+    }
+
+    // 구매자명 빈값 체크
+    if (buyerName === '') {
+        alert('구매자명을 입력해 주세요.');
+        return false;
+    }
+
+    // 카드번호 빈값 및 자리수 체크
+    if (cardNo === '' || cardNo.length < 15) {
+        alert('올바른 카드번호(15~16자리)를 입력해 주세요.');
+        return false;
+    }
+
+    // 유효기간 자리수 체크 (YYMM 형식 4자리)
+    if (expireYymm === '' || expireYymm.length !== 4) {
+        alert('유효기간 4자리(YYMM)를 정확히 입력해 주세요.');
+        return false;
+    }
+
+    // ==========================================
+    // 3. 모든 유효성 체크를 통과한 경우에만 최종 전송 처리
+    // ==========================================
     var btn = document.getElementById('btnPay');
     btn.disabled = true;
     btn.textContent = '결제 처리 중...';
+
+    // 실제 서버(pay_process.php)로 데이터 전송 실행
+    this.submit(); 
 });
+
 </script>
 
 </body>
