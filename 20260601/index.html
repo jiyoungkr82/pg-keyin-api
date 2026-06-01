@@ -1,1 +1,120 @@
-ssss
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>키인 결제</title>
+    <style>
+        /* 포맷을 깔끔하게 유지하기 위한 최소한의 스타일 (생략 가능) */
+        body { font-family: sans-serif; max-width: 500px; margin: 20px auto; padding: 0 15px; line-height: 1.6; }
+        .sub { color: #666; margin-bottom: 20px; }
+        fieldset { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+        legend { font-weight: bold; padding: 0 5px; }
+        label { display: block; margin-bottom: 12px; }
+        .lbl { display: block; font-size: 14px; font-weight: bold; margin-bottom: 4px; }
+        .req { color: red; }
+        input, select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        .row { display: flex; gap: 10px; }
+        .row label { flex: 1; }
+        .row label.wide { flex: 1.5; }
+        .hint { font-size: 12px; color: #666; margin: -5px 0 10px 0; }
+        .btn { width: 100%; padding: 12px; font-size: 16px; font-weight: bold; color: white; background-color: #007bff; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+        .btn:disabled { background-color: #ccc; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+<h1>키인 결제</h1>
+<p class="sub">카드 정보를 입력하고 결제를 진행합니다.</p>
+
+<!-- 폼 전송 주소(action)는 원래 파일인 pay_process.php로 임시 지정되어 있습니다 -->
+<form method="post" action="pay_process.php" id="payForm" autocomplete="off" novalidate>
+    <!-- CSRF 토큰 샘플 데이터 임시 삽입 -->
+    <input type="hidden" name="csrf" value="sample_csrf_token_value">
+
+    <fieldset>
+        <legend>주문 정보</legend>
+        <label>
+            <span class="lbl">결제금액 (원) <span class="req">*</span></span>
+            <input type="number" name="amount" min="100" step="1" required placeholder="100 이상" value="1000">
+        </label>
+        <label>
+            <span class="lbl">상품명 <span class="req">*</span></span>
+            <input type="text" name="goods_name" maxlength="100" required placeholder="예: 테스트상품" value="테스트 상품">
+        </label>
+        <label>
+            <span class="lbl">구매자명 <span class="req">*</span></span>
+            <input type="text" name="buyer_name" maxlength="50" required value="홍길동">
+        </label>
+        <label>
+            <span class="lbl">구매자 연락처</span>
+            <input type="text" name="buyer_phone" maxlength="20" placeholder="01012345678">
+        </label>
+        <label>
+            <span class="lbl">구매자 이메일</span>
+            <input type="email" name="buyer_email" maxlength="100" placeholder="example@email.com">
+        </label>
+    </fieldset>
+
+    <fieldset>
+        <legend>카드 정보</legend>
+        <label>
+            <span class="lbl">카드번호 <span class="req">*</span></span>
+            <input type="text" name="card_no" inputmode="numeric" maxlength="19" required placeholder="15~16자리">
+        </label>
+        <div class="row">
+            <label>
+                <span class="lbl">유효기간 (YYMM) <span class="req">*</span></span>
+                <input type="text" name="expire_yymm" inputmode="numeric" maxlength="4" required placeholder="2612">
+            </label>
+            <label>
+                <span class="lbl">할부 <span class="req">*</span></span>
+                <select name="installment" required>
+                    <option value="00">일시불 (00)</option>
+                    <!-- PHP 반복문 구간을 순수 HTML 옵션으로 변환 완료 (2개월~12개월) -->
+                    <option value="02">2개월</option>
+                    <option value="03">3개월</option>
+                    <option value="04">4개월</option>
+                    <option value="05">5개월</option>
+                    <option value="06">6개월</option>
+                    <option value="07">7개월</option>
+                    <option value="08">8개월</option>
+                    <option value="09">9개월</option>
+                    <option value="10">10개월</option>
+                    <option value="11">11개월</option>
+                    <option value="12">12개월</option>
+                </select>
+            </label>
+        </div>
+        <p class="hint">구인증 결제 시에만 아래 항목을 입력하세요. (비인증은 비워도 됩니다)</p>
+        <div class="row">
+            <label>
+                <span class="lbl">카드 비밀번호 앞 2자리</span>
+                <input type="password" name="cert_pw" inputmode="numeric" maxlength="2" autocomplete="off" placeholder="구인증 시">
+            </label>
+            <label class="wide">
+                <span class="lbl">생년월일 6자리 / 사업자번호 10자리</span>
+                <input type="password" name="cert_no" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="구인증 시">
+            </label>
+        </div>
+    </fieldset>
+
+    <p class="hint">가맹점: 테스트 가맹점</p>
+
+    <!-- 즉시 테스트할 수 있도록 disabled 속성을 제거했습니다 -->
+    <button type="submit" class="btn btn-primary" id="btnPay">결제하기</button>
+</form>
+
+<script>
+document.getElementById('payForm').addEventListener('submit', function (e) {
+    // 순수 HTML 테스트를 위해 실제 전송(action)되는 것을 잠시 방지하려면 아래 주석(#)을 해제하세요.
+    // e.preventDefault(); 
+    
+    var btn = document.getElementById('btnPay');
+    btn.disabled = true;
+    btn.textContent = '결제 처리 중...';
+});
+</script>
+
+</body>
+</html>
