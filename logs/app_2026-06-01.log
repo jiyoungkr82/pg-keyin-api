@@ -1,0 +1,41 @@
+[2026-06-01 10:53:46] [INFO] 결제 요청 시작 - 구매자: 홍길동, 금액: 50000
+[2026-06-01 10:53:52] [WARN] 결제 승인 실패 - 코드: PG_DECLINED, 사유: 결제에 실패했습니다: 해당 카드는 유효하지 않습니다.
+[2026-06-01 10:53:52] [ERROR] 결제 완료 후 DB 저장 실패 (돈은 나갔는데 DB 기록 안됨!): SQLSTATE[HY000] [1045] Access denied for user 'root'@'172.18.0.1' (using password: YES) {"order_no":"","approval_number":""}
+[2026-06-01 11:31:54] [INFO] 결제 요청 시작 - 구매자: 홍길동, 금액: 50000
+[2026-06-01 11:31:57] [WARN] 결제 승인 실패 - 코드: PG_DECLINED, 사유: 결제에 실패했습니다: 해당 카드는 유효하지 않습니다.
+[2026-06-01 11:31:57] [ERROR] 결제 완료 후 DB 저장 실패 (돈은 나갔는데 DB 기록 안됨!): SQLSTATE[HY000] [1045] Access denied for user 'root'@'172.18.0.1' (using password: YES) {"order_no":"","approval_number":""}
+[2026-06-01 11:34:25] [INFO] 결제 요청 시작 - 구매자: 홍길동, 금액: 50000
+[2026-06-01 11:34:29] [WARN] 결제 승인 실패 - 코드: PG_DECLINED, 사유: 결제에 실패했습니다: 해당 카드는 유효하지 않습니다.
+[2026-06-01 11:34:29] [ERROR] 결제 완료 후 DB 저장 실패 (돈은 나갔는데 DB 기록 안됨!): SQLSTATE[HY000] [1045] Access denied for user 'root'@'172.18.0.1' (using password: YES) {"order_no":"","approval_number":""}
+[2026-06-01 11:37:16] [INFO] 결제 요청 시작 - 구매자: 홍길동, 금액: 50000
+[2026-06-01 11:37:19] [WARN] 결제 승인 실패 - 코드: PG_DECLINED, 사유: 결제에 실패했습니다: 해당 카드는 유효하지 않습니다.
+[2026-06-01 11:37:19] [ERROR] 결제 완료 후 DB 저장 실패 (돈은 나갔는데 DB 기록 안됨!): SQLSTATE[HY000] [1045] Access denied for user 'root'@'172.18.0.1' (using password: YES) {"order_no":"","approval_number":""}
+[2026-06-01 11:38:29] [INFO] 결제 요청 시작 - 구매자: 홍길동, 금액: 50000
+[2026-06-01 11:38:32] [WARN] 결제 승인 실패 - 코드: PG_DECLINED, 사유: 결제에 실패했습니다: 해당 카드는 유효하지 않습니다.
+[2026-06-01 11:38:32] [ERROR] 결제 완료 후 DB 저장 실패 (돈은 나갔는데 DB 기록 안됨!): SQLSTATE[HY000] [1045] Access denied for user 'root'@'172.18.0.1' (using password: YES) {"order_no":"","approval_number":""}
+[2026-06-01 11:50:24] [INFO] 결제 요청 시작 - 구매자: 홍길동, 금액: 50000
+[2026-06-01 11:50:27] [WARN] 결제 승인 실패 - 코드: PG_DECLINED, 사유: 결제에 실패했습니다: 해당 카드는 유효하지 않습니다.
+[2026-06-01 11:50:27] [ERROR] 결제 완료 후 DB 저장 실패 (돈은 나갔는데 DB 기록 안됨!): SQLSTATE[42S02]: Base table or view not found: 1146 Table 'keyin_payment_db.g5_shop_payment' doesn't exist {"order_no":"","approval_number":""}
+[2026-06-01 11:52:34] [INFO] 결제 요청 시작 - 구매자: 홍길동, 금액: 50000
+[2026-06-01 11:52:37] [WARN] 결제 승인 실패 - 코드: PG_DECLINED, 사유: 결제에 실패했습니다: 해당 카드는 유효하지 않습니다.
+[2026-06-01 11:52:37] [ERROR] 결제 완료 후 DB 저장 실패 (돈은 나갔는데 DB 기록 안됨!): SQLSTATE[42S02]: Base table or view not found: 1146 Table 'keyin_payment_db.g5_shop_payment' doesn't exist {"order_no":"","approval_number":""}
+[2026-06-01 11:53:36] [INFO] 결제 요청 시작 - 구매자: 홍길동, 금액: 50000
+[2026-06-01 11:53:39] [WARN] 결제 승인 실패 - 코드: PG_DECLINED, 사유: 결제에 실패했습니다: 해당 카드는 유효하지 않습니다.
+[2026-06-01 12:50:45] [INFO] 결제 요청 시작 - 구매자: 홍길동, 금액: 50000
+[2026-06-01 12:50:45] [WARN] 결제 승인 실패 - 코드: NETWORK, 사유: 결제 API 통신 오류: SSL certificate problem: self-signed certificate in certificate chain
+[2026-06-01 12:50:45] [INFO] 메시지 큐 동적 등록 성공 - 타겟 URL: http://127.0.0
+[2026-06-01 13:57:13] [INFO] 결제 요청 시작 - 구매자: 홍길동, 금액: 50000
+[2026-06-01 13:57:13] [WARN] 결제 승인 실패 - 코드: NETWORK, 사유: 결제 API 통신 오류: SSL certificate problem: self-signed certificate in certificate chain
+[2026-06-01 13:57:13] [INFO] 메시지 큐 동적 등록 성공 - 타겟 URL: http://localhost/webhook_test/webhook.php
+[2026-06-01 14:05:06] [INFO] 결제 요청 시작 - 구매자: 홍길동, 금액: 50000
+[2026-06-01 14:05:07] [WARN] 결제 승인 실패 - 코드: NETWORK, 사유: 결제 API 통신 오류: SSL certificate problem: self-signed certificate in certificate chain
+[2026-06-01 14:05:07] [INFO] 메시지 큐 동적 등록 성공 - 타겟 URL: http://localhost/webhook_test/webhook.php
+[2026-06-01 14:05:24] [INFO] 웹훅 일꾼(Worker) 작동 시작 - 대기열 감시 중...
+[2026-06-01 14:05:24] [INFO] 일감 처리 시작 - ID: 1
+[2026-06-01 14:05:24] [INFO] 일감 처리 완수 및 대기열 삭제 - ID: 1
+[2026-06-01 14:12:21] [INFO] 결제 요청 시작 - 구매자: 홍길동, 금액: 50000
+[2026-06-01 14:12:21] [WARN] 결제 승인 실패 - 코드: NETWORK, 사유: 결제 API 통신 오류: SSL certificate problem: self-signed certificate in certificate chain
+[2026-06-01 14:12:21] [INFO] 메시지 큐 동적 등록 성공 - 타겟 URL: http://localhost/webhook_test/webhook.php
+[2026-06-01 14:12:31] [INFO] 웹훅 일꾼(Worker) 작동 시작 - 대기열 감시 중...
+[2026-06-01 14:12:31] [INFO] 일감 처리 시작 - ID: 1
+[2026-06-01 14:12:31] [INFO] 일감 처리 완수 및 대기열 삭제 - ID: 1

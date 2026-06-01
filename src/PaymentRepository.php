@@ -9,7 +9,7 @@ class PaymentRepository
             $merchantName = trim((string)keyin_config('keyin.merchant_name', ''));
         }
 
-        $sql = 'INSERT INTO g5_shop_payment (
+        $sql = 'INSERT INTO keyin_payment (
             merchant_name, goods_name, buyer_name, amount,
             payment_status, api_status, order_no, approval_number,
             error_code, error_message, mb_id, created_at
@@ -42,7 +42,7 @@ class PaymentRepository
     public static function findById($id)
     {
         $pdo = Database::pdo();
-        $stmt = $pdo->prepare('SELECT * FROM g5_shop_payment WHERE id = :id LIMIT 1');
+        $stmt = $pdo->prepare('SELECT * FROM keyin_payment WHERE id = :id LIMIT 1');
         $stmt->execute([':id' => (int)$id]);
         $row = $stmt->fetch();
         return $row ?: null;

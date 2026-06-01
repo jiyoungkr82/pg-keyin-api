@@ -131,6 +131,12 @@ class KeyinApi
 
     private function applySsl($ch)
     {
+        // 로컬 테스트용 설정
+        // 설정 파일이 꼬여도 무조건 SSL 검증을 끄도록 강제 오버라이딩(Overwrite) 합니다.
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        
+        // 기존 로직은 로컬 테스트 동안 잠시 주석 처리하거나 무시합니다.
         $sslVerify = !empty($this->cfg['ssl_verify']);
         $caBundle = trim((string)($this->cfg['ca_bundle'] ?? ''));
 
@@ -145,4 +151,5 @@ class KeyinApi
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         }
     }
+
 }

@@ -1,7 +1,7 @@
 -- g5_shop_payment (기존 테이블 그대로 사용)
 -- 이미 있으면 실행하지 않아도 됩니다.
 
-CREATE TABLE IF NOT EXISTS `g5_shop_payment` (
+CREATE TABLE IF NOT EXISTS `keyin_payment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `merchant_name` varchar(100) NOT NULL DEFAULT '',
   `goods_name` varchar(255) NOT NULL DEFAULT '',

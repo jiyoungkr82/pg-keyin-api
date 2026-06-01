@@ -16,8 +16,9 @@ class Database
         $user = keyin_config('db.user', 'root');
         $pass = keyin_config('db.pass', '');
         $charset = keyin_config('db.charset', 'utf8mb4');
+        $port = keyin_config('db.port', '3308'); 
 
-        $dsn = 'mysql:host='.$host.';dbname='.$name.';charset='.$charset;
+        $dsn = 'mysql:host='.$host.';port='.$port.';dbname='.$name.';charset='.$charset;
         self::$pdo = new PDO($dsn, $user, $pass, [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
