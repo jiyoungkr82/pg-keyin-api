@@ -28,7 +28,7 @@
 <p class="sub">카드 정보를 입력하고 결제를 진행합니다.</p>
 
 <!-- 폼 전송 주소(action)는 원래 파일인 pay_process.php로 임시 지정되어 있습니다 -->
-<form method="post" action="pay_process.php" id="payForm" autocomplete="off" novalidate>
+<form method="post" action="pay_submit.php" id="payForm" autocomplete="off" novalidate>
     <!-- CSRF 토큰 샘플 데이터 임시 삽입 -->
     <input type="hidden" name="csrf" value="sample_csrf_token_value">
 
@@ -60,7 +60,7 @@
         <legend>카드 정보</legend>
         <label>
             <span class="lbl">카드번호 <span class="req">*</span></span>
-            <input type="text" name="card_no" inputmode="numeric" maxlength="19" required placeholder="15~16자리">
+            <input type="text" name="cn_val" inputmode="numeric" maxlength="19" required placeholder="15~16자리">
         </label>
         <div class="row">
             <label>
@@ -107,15 +107,23 @@
 
 <script>
 document.getElementById('payForm').addEventListener('submit', function (e) {
-    // 1. [필수] 서버로 데이터가 그냥 넘어가기 전에 먼저 전송을 차단 (유효성 체크를 위함)
+    // 1. 서버로 데이터가 그냥 넘어가기 전에 먼저 전송을 차단 (유효성 체크를 위함)
     e.preventDefault();
 
     // 2. 유효성 체크 대상 입력값 가져오기
-    var amount = document.getElementsByName('amount')[0].value;
-    var goodsName = document.getElementsByName('goods_name')[0].value.trim();
-    var buyerName = document.getElementsByName('buyer_name')[0].value.trim();
-    var cardNo = document.getElementsByName('card_no')[0].value.trim();
-    var expireYymm = document.getElementsByName('expire_yymm')[0].value.trim();
+    // 개선 => input의 name 속성으로 정확하게 값 매핑
+    var form = e.target;
+    var amount = form.elements['amount'].value;
+    var goodsName = form.elements['goods_name'].value.trim();
+    var buyerName = form.elements['buyer_name'].value.trim();
+    var cnV = form.elements['cn_val'].value.trim();
+    var expireYymm = form.elements['expire_yymm'].value.trim();
+    // 개선 전 기존 방식
+    // var amount = document.getElementsByName('amount')[0].value;
+    // var goodsName = document.getElementsByName('goods_name')[0].value.trim();
+    // var buyerName = document.getElementsByName('buyer_name')[0].value.trim();
+    // var cardNo = document.getElementsByName('card_no')[0].value.trim();
+    // var expireYymm = document.getElementsByName('expire_yymm')[0].value.trim();
     
     // 금액 체크 (100원 이상인지 확인)
     if (!amount || parseInt(amount) < 100) {
@@ -136,7 +144,7 @@ document.getElementById('payForm').addEventListener('submit', function (e) {
     }
 
     // 카드번호 빈값 및 자리수 체크
-    if (cardNo === '' || cardNo.length < 15) {
+    if (cnV === '' || cnV.length < 15) {
         alert('올바른 카드번호(15~16자리)를 입력해 주세요.');
         return false;
     }
@@ -154,11 +162,9 @@ document.getElementById('payForm').addEventListener('submit', function (e) {
     btn.disabled = true;
     btn.textContent = '결제 처리 중...';
 
-    // 실제 서버(pay_process.php)로 데이터 전송 실행
+    // 실제 서버(pay_submit.php)로 데이터 전송 실행
     this.submit(); 
 });
-
 </script>
-
 </body>
 </html>
