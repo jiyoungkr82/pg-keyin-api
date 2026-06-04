@@ -56,8 +56,8 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, $json_payload);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 // 로컬 아파치가 인증서 유효성을 강제로 검사하지 않고 무조건 통과시키도록 강제 명령합니다.
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); 
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true); 
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, true); 
 
 // 모든 세팅이 완료된 후 통신 실행
 $response = curl_exec($ch);
