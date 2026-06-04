@@ -1,0 +1,121 @@
+/* ===  1. 폼 필드 상태별 스타일  === */
+/* 입력 필드 기본 상태 */
+.form-control:focus,
+.form-select:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* 입력 필드 유효성 검사 상태 */
+.form-control.is-valid,
+.form-select.is-valid {
+  border-color: #28a745;
+  padding-right: calc(1.5em + 0.75rem);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M.5 4.5L2 6l4-4'/%3e%3c/svg%3e");
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-repeat: no-repeat;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+/* 유효하지 않은 입력 */
+.form-control.is-invalid,
+.form-select.is-invalid {
+  border-color: #dc3545;
+}
+
+/* 에러 메시지 */
+.invalid-feedback {
+  display: block;
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.valid-feedback {
+  display: block;
+  color: #28a745;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* ===== 2. 결과 메시지 스타일 ===== */
+.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+}
+
+/* ===== 3. 버튼 상태 ===== */
+.btn-primary:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.btn-primary.loading {
+    position: relative;
+}
+
+.btn-primary.loading::after {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-left: 10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== 4. 입력 필드 특수 처리 ===== */
+/* 카드번호 등 숫자 필드 - 폰트 모노스페이스 */
+input[inputmode="numeric"] {
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.1em;
+}
+
+/* ===== 5. 폼 전체 유효성 검사 표시 ===== */
+form.was-validated .form-control:invalid,
+form.was-validated .form-select:invalid {
+    border-color: #dc3545;
+}
+
+form.was-validated .form-control.is-valid,
+form.was-validated .form-select.is-valid {
+    border-color: #28a745;
+}
+
+/* ===== 6. 반응형 조정 ===== */
+@media (max-width: 576px) {
+    .card {
+        margin: 0 10px;
+    }
+    
+    .invalid-feedback {
+        font-size: 0.8rem;
+    }
+}
+
+/* ===== 7. 로딩/처리 중 상태 ===== */
+.processing {
+    opacity: 0.6;
+    pointer-events: none;
+}

@@ -1,77 +1,102 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>키인 결제</title>
-    <style>
-        /* 포맷을 깔끔하게 유지하기 위한 최소한의 스타일 (생략 가능) */
-        body { font-family: sans-serif; max-width: 500px; margin: 20px auto; padding: 0 15px; line-height: 1.6; }
-        .sub { color: #666; margin-bottom: 20px; }
-        fieldset { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
-        legend { font-weight: bold; padding: 0 5px; }
-        label { display: block; margin-bottom: 12px; }
-        .lbl { display: block; font-size: 14px; font-weight: bold; margin-bottom: 4px; }
-        .req { color: red; }
-        input, select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-        .row { display: flex; gap: 10px; }
-        .row label { flex: 1; }
-        .row label.wide { flex: 1.5; }
-        .hint { font-size: 12px; color: #666; margin: -5px 0 10px 0; }
-        .btn { width: 100%; padding: 12px; font-size: 16px; font-weight: bold; color: white; background-color: #007bff; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
-        .btn:disabled { background-color: #ccc; cursor: not-allowed; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>키인 결제</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    crossorigin="anonymous">
+  <!-- 커스텀 스타일 -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
+  <div class="container py-5">
+    <div class="card shadow-sm mx-auto" style="max-width: 760px;">
+      <div class="card-body">
+        <h1 class="h4 mb-2">키인 결제</h1>
+        <p class="text-muted mb-4">카드 정보를 입력하고 결제를 진행합니다.</p>
 
-<h1>키인 결제</h1>
-<p class="sub">카드 정보를 입력하고 결제를 진행합니다.</p>
+        <form method="post" action="pay_submit.php" id="payForm" autocomplete="off" novalidate>
+          <!-- CSRF 토큰 샘플 데이터 임시 삽입 -->
+          <input type="hidden" name="csrf" value="sample_csrf_token_value">
 
-<!-- 폼 전송 주소(action)는 원래 파일인 pay_process.php로 임시 지정되어 있습니다 -->
-<form method="post" action="pay_submit.php" id="payForm" autocomplete="off" novalidate>
-    <!-- CSRF 토큰 샘플 데이터 임시 삽입 -->
-    <input type="hidden" name="csrf" value="sample_csrf_token_value">
+          <div class="mb-4">
+            <h2 class="h6 mb-3">주문 정보</h2>
 
-    <fieldset>
-        <legend>주문 정보</legend>
-        <label>
-            <span class="lbl">결제금액 (원) <span class="req">*</span></span>
-            <input type="number" name="amount" min="100" step="1" required placeholder="100 이상" value="1000">
-        </label>
-        <label>
-            <span class="lbl">상품명 <span class="req">*</span></span>
-            <input type="text" name="goods_name" maxlength="100" required placeholder="예: 테스트상품" value="테스트 상품">
-        </label>
-        <label>
-            <span class="lbl">구매자명 <span class="req">*</span></span>
-            <input type="text" name="buyer_name" maxlength="50" required value="홍길동">
-        </label>
-        <label>
-            <span class="lbl">구매자 연락처</span>
-            <input type="text" name="buyer_phone" maxlength="20" placeholder="01012345678">
-        </label>
-        <label>
-            <span class="lbl">구매자 이메일</span>
-            <input type="email" name="buyer_email" maxlength="100" placeholder="example@email.com">
-        </label>
-    </fieldset>
+            <div class="mb-3">
+              <label for="amount" class="form-label">결제금액 (원) <span class="text-danger">*</span></label>
+              <input id="amount" type="number" name="amount" aria-invalid="false" aria-describedby="amount-feedback" class="form-control" min="100" max="9999999" step="1" required
+                placeholder="100 이상" value="1000">
+              <div id="amount-feedback" class="invalid-feedback">결제금액은 100원 이상이어야 합니다.</div>
+            </div>
 
-    <fieldset>
-        <legend>카드 정보</legend>
-        <label>
-            <span class="lbl">카드번호 <span class="req">*</span></span>
-            <input type="text" name="cn_val" inputmode="numeric" maxlength="19" required placeholder="15~16자리">
-        </label>
-        <div class="row">
-            <label>
-                <span class="lbl">유효기간 (YYMM) <span class="req">*</span></span>
-                <input type="text" name="expire_yymm" inputmode="numeric" maxlength="4" required placeholder="2612">
-            </label>
-            <label>
-                <span class="lbl">할부 <span class="req">*</span></span>
-                <select name="installment" required>
+            <div class="mb-3">
+              <label for="goods_name" class="form-label">상품명 <span class="text-danger">*</span></label>
+              <input id="goods_name" name="goods_name" type="text" aria-describedby="goods_name-feedback" class="form-control" minlength="2" maxlength="100" required
+                placeholder="예: 테스트상품" value="테스트 상품">
+              <div id="goods_name-feedback" class="invalid-feedback">상품명을 입력해 주세요.</div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-2 g-3">
+              <div class="col">
+                <div class="mb-3">
+                  <label for="buyer_name" class="form-label">구매자명 <span class="text-danger">*</span></label>
+                  <input id="buyer_name" name="buyer_name" type="text" aria-describedby="buyer_name-feedback" class="form-control" minlength="2" maxlength="50" required
+                    value="홍길동">
+                  <div id="buyer_name-feedback" class="invalid-feedback">구매자명을 입력해 주세요.</div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="mb-3">
+                  <label for="buyer_phone" class="form-label">구매자 연락처</label>
+                  <input id="buyer_phone" name="buyer_phone" type="tel" pattern="[0-9/-]+" aria-describedby="buyer_phone-feedback" class="form-control" maxlength="20"
+                    placeholder="01012345678">
+                  <div id="buyer_phone-feedback" class="invalid-feedback"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-1 g-3">
+              <div class="col">
+                <div class="mb-3">
+                  <label for="buyer_email" class="form-label">구매자 이메일</label>
+                  <input id="buyer_email" name="buyer_email" type="email" aria-describedby="buyer_email-feedback" class="form-control" maxlength="100"
+                    autocomplete="email" placeholder="example@example.com">
+                  <div id="buyer_email-feedback" class="invalid-feedback"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <h2 class="h6 mb-3">카드 정보</h2>
+
+            <!-- 카드번호 필드 -->
+            <div class="mb-3">
+              <label for="cn_val" class="form-label">카드번호 <span class="text-danger">*</span></label>
+              <input id="cn_val" type="text" name="cn_val" aria-describedby="cn_val-feedback" inputmode="numeric" pattern="[0-9\s]{15,19}" minlength="15" maxlength="19" required placeholder="15~16자리" class="form-control">
+              <div id="cn_val-feedback" class="invalid-feedback">올바른 카드번호를 입력해 주세요.</div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-2 g-3">
+              <div class="col">
+                <div class="mb-3">
+                  <label for="expire_yymm" class="form-label">유효기간 (YYMM) <span class="text-danger">*</span></label>
+                  <input id="expire_yymm" name="expire_yymm" type="text" pattern="[0-9]{4}" minlength="4" maxlength="4" aria-describedby="expire_yymm-feedback" class="form-control" inputmode="numeric"
+                    required placeholder="2612">
+                  <div id="expire_yymm-feedback" class="invalid-feedback">유효기간 4자리(YYMM)을 정확히 입력해 주세요.</div>
+                </div>
+              </div>
+
+              <!-- 할부 선택 -->
+              <div class="col">
+                <div class="mb-3">
+                  <label for="installment" class="form-label">할부 <span class="text-danger">*</span></label>
+                  <select id="installment" name="installment" aria-describedby="installment-feedback" class="form-select" required>
                     <option value="00">일시불 (00)</option>
-                    <!-- PHP 반복문 구간을 순수 HTML 옵션으로 변환 완료 (2개월~12개월) -->
                     <option value="02">2개월</option>
                     <option value="03">3개월</option>
                     <option value="04">4개월</option>
@@ -83,88 +108,88 @@
                     <option value="10">10개월</option>
                     <option value="11">11개월</option>
                     <option value="12">12개월</option>
-                </select>
-            </label>
-        </div>
-        <p class="hint">구인증 결제 시에만 아래 항목을 입력하세요. (비인증은 비워도 됩니다)</p>
-        <div class="row">
-            <label>
-                <span class="lbl">카드 비밀번호 앞 2자리</span>
-                <input type="password" name="cert_pw" inputmode="numeric" maxlength="2" autocomplete="off" placeholder="구인증 시">
-            </label>
-            <label class="wide">
-                <span class="lbl">생년월일 6자리 / 사업자번호 10자리</span>
-                <input type="password" name="cert_no" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="구인증 시">
-            </label>
-        </div>
-    </fieldset>
+                  </select>
+                  <div id="installment-feedback" class="invalid-feedback"></div>
+                </div>
+              </div>
+            </div>
 
-    <p class="hint">가맹점: 테스트 가맹점</p>
+            <p class="text-muted small mb-3">구인증 결제 시에만 아래 항목을 입력하세요. (비인증은 비워도 됩니다)</p>
 
-    <!-- 즉시 테스트할 수 있도록 disabled 속성을 제거했습니다 -->
-    <button type="submit" class="btn btn-primary" id="btnPay">결제하기</button>
-</form>
+            <div class="row row-cols-1 row-cols-md-2 g-3">
+              <div class="col">
+                <div class="mb-3">
+                  <label for="cert_pw" class="form-label">카드 비밀번호 앞 2자리</label>
+                  <input id="cert_pw" name="cert_pw" type="password" class="form-control" inputmode="numeric"
+                    minlength="2" maxlength="2" autocomplete="off" placeholder="구인증 시">
+                </div>
+              </div>
+            </div>
 
-<script>
-document.getElementById('payForm').addEventListener('submit', function (e) {
-    // 1. 서버로 데이터가 그냥 넘어가기 전에 먼저 전송을 차단 (유효성 체크를 위함)
-    e.preventDefault();
+            <div class="row row-cols-1 row-cols-md-1 g-3">
+              <div class="col">
+                <div class="mb-3">
+                  <label for="cert_no" class="form-label">생년월일 6자리 / 사업자번호 10자리</label>
+                  <input id="cert_no" name="cert_no" type="password" class="form-control" inputmode="numeric"
+                    pattern="[0-9]{6,10}" minlength="6" maxlength="10" autocomplete="off" placeholder="구인증 시">
+                </div>
+              </div>
+            </div>
+          </div>
 
-    // 2. 유효성 체크 대상 입력값 가져오기
-    // 개선 => input의 name 속성으로 정확하게 값 매핑
-    var form = e.target;
-    var amount = form.elements['amount'].value;
-    var goodsName = form.elements['goods_name'].value.trim();
-    var buyerName = form.elements['buyer_name'].value.trim();
-    var cnV = form.elements['cn_val'].value.trim();
-    var expireYymm = form.elements['expire_yymm'].value.trim();
-    // 개선 전 기존 방식
-    // var amount = document.getElementsByName('amount')[0].value;
-    // var goodsName = document.getElementsByName('goods_name')[0].value.trim();
-    // var buyerName = document.getElementsByName('buyer_name')[0].value.trim();
-    // var cardNo = document.getElementsByName('card_no')[0].value.trim();
-    // var expireYymm = document.getElementsByName('expire_yymm')[0].value.trim();
-    
-    // 금액 체크 (100원 이상인지 확인)
-    if (!amount || parseInt(amount) < 100) {
-        alert('결제금액은 100원 이상이어야 합니다.');
-        return false;
-    }
+          <p class="text-muted small">가맹점: 테스트 가맹점</p>
 
-    // 상품명 빈값 체크
-    if (goodsName === '') {
-        alert('상품명을 입력해 주세요.');
-        return false;
-    }
+          <!-- 결과 메시지 영역 -->
+          <div id="result-container" style="display: none;">
+            <div id="result-message" class="alert" role="alert"></div>
+          </div>
 
-    // 구매자명 빈값 체크
-    if (buyerName === '') {
-        alert('구매자명을 입력해 주세요.');
-        return false;
-    }
+          <button type="submit" class="btn btn-primary w-100" id="btnPay">결제하기</button>
+        </form>
+      </div>
+    </div>
+  </div>
 
-    // 카드번호 빈값 및 자리수 체크
-    if (cnV === '' || cnV.length < 15) {
-        alert('올바른 카드번호(15~16자리)를 입력해 주세요.');
-        return false;
-    }
+  <!-- Stage 1 테스트용 기본 검증 -->
+  <script>
+    // 폼 제출 시 기본 검증
+    document.getElementById('payForm').addEventListener('submit', function(e) {
+      if (!this.checkValidity()) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.classList.add('was-validated');
+      } else {
+        e.preventDefault(); // 기본 form 제출 방지 (2단계에서 실제 제출 로직 추가 예정)
+        this.classList.remove('was-validated');
 
-    // 유효기간 자리수 체크 (YYMM 형식 4자리)
-    if (expireYymm === '' || expireYymm.length !== 4) {
-        alert('유효기간 4자리(YYMM)를 정확히 입력해 주세요.');
-        return false;
-    }
+        // 명시적으로 form 제출
+        console.log('폼이 유효합니다. 실제 결제 로직을 여기에 추가하세요.');
+        console.log('데이터:', new FormData(this)); // 디버깅용
+        this.submit(); // 실제 제출 (테스트 단계에서는 주석 처리 가능)
+      }
+    });
 
-    // ==========================================
-    // 3. 모든 유효성 체크를 통과한 경우에만 최종 전송 처리
-    // ==========================================
-    var btn = document.getElementById('btnPay');
-    btn.disabled = true;
-    btn.textContent = '결제 처리 중...';
+    // 각 필드 실시간 검증 피드백
+    document.querySelectorAll('.form-control, .form-select').forEach(field => {
+      field.addEventListener('blur', function() {
+        if (this.checkValidity()) {
+          this.classList.remove('is-invalid');
+          this.classList.add('is-valid');
+        } else {
+          this.classList.remove('is-valid');
+          this.classList.add('is-invalid');
+        }
+      });
 
-    // 실제 서버(pay_submit.php)로 데이터 전송 실행
-    this.submit(); 
-});
-</script>
+      // 입력 중에 유효성 초기화
+      field.addEventListener('input', function() {
+        if (this.classList.contains('is-invalid') || this.classList.contains('is-valid')) {
+          this.classList.remove('is-valid', 'is-invalid');
+        }
+      });
+    });
+  </script>
+
+  <!-- <script src="js/pay-form.js"></script> -->
 </body>
 </html>
