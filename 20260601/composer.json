@@ -1,0 +1,13 @@
+{
+  "name": "wspay/pg-keyin",
+  "description": "PG 수기결제 테스트",
+  "require": {
+    "guzzlehttp/guzzle": "^7.0",
+    "apache/log4php": "^2.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": ""
+    }
+  }
+}

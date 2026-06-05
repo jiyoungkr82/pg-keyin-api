@@ -2,3 +2,12 @@ config/config.local.php
 storage/sessions/*
 !storage/sessions/.gitkeep
 .env
+vendor/
+logs/
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
