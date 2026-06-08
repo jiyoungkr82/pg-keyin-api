@@ -1,4 +1,9 @@
 <?php
+// 💡 [임시 디버깅 코드] 숨어있는 백엔드 DB 에러를 브라우저 화면에 강제로 출력하는 설정
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // composer 설정
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/config.php';
@@ -8,7 +13,7 @@ require __DIR__ . '/PaymentRepository.php';
 require __DIR__ . '/Logger.php';
 
 // 로거 초기화
-$logger = get_logger();
+$logger = get_logger('pay_submit');
 
 // 1. 초기 보안 확인 및 데이터 수집
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -23,9 +28,12 @@ $goodsName = $_POST['goods_name'] ?? '';
 $buyerName = $_POST['buyer_name'] ?? '';
 $buyerPhone = $_POST['buyer_phone'] ?? '';
 $buyerEmail = $_POST['buyer_email'] ?? '';
-$cardNo = $_POST['cn_val'] ?? '';
+$cardNo = preg_replace('/\s+/', '', $_POST['cn_val'] ?? '');
 $expireYymm = $_POST['expire_yymm'] ?? '';
 $installment = $_POST['installment'] ?? '';
+$authMethod = $_POST['auth_method'] ?? 'none'; // 'none' or 'cert'
+$certPw     = $_POST['cert_pw'] ?? '';
+$certNo     = $_POST['cert_no'] ?? '';
 
 // 2. 서버 사이드 필수 데이터 검증
 if (empty($amount) || (int)$amount < 100 
@@ -84,15 +92,42 @@ if (empty($amount) || (int)$amount < 100
 
 // guzzle client
 $client = new KeyinClient();
-$result = $client->pay([
+// 비인증/구인증에 따른 요청 파라미터 구분
+if ($authMethod === 'cert') {
+    if (strlen($certPw) !== 2 || !ctype_digit($certPw)) {
+        echo "<script>alert('비밀번호가 유효하지 않습니다.'); history.back();</script>";
+        exit('Bad Request');
+    }
+    if (!in_array(strlen($certNo), [6, 10]) || !ctype_digit($certNo)) {
+        echo "<script>alert('생년월일이 유효하지 않습니다.'); history.back();</script>";
+        exit('Bad Request');
+    }
+    // 구인증 요청
+    $result = $client->pay([
     'amount' => (int)$amount,
     'goods_name' => $goodsName,
     'buyer_name' => $buyerName,
     'buyer_phone' => $buyerPhone,
+    'buyer_email' => $buyerEmail,
     'card_no' => $cardNo,
     'expire_yymm' => $expireYymm,
     'installment' => $installment,
-]);
+    'cert_pw'     => $certPw,
+    'cert_no'       => $certNo
+    ]);
+} else {
+    // 비인증 요청
+    $result = $client->pay([
+    'amount' => (int)$amount,
+    'goods_name' => $goodsName,
+    'buyer_name' => $buyerName,
+    'buyer_phone' => $buyerPhone,
+    'buyer_email' => $buyerEmail,
+    'card_no' => $cardNo,
+    'expire_yymm' => $expireYymm,
+    'installment' => $installment
+    ]);
+}
 
 $status = (!empty($result['success'])) ? 'SUCCESS' : 'FAIL';
 $pay_data = $result['data'] ?? [];
@@ -103,18 +138,18 @@ try {
       'order_no' => $pay_data['order_no'] ?? '',
       'approval_number' => $pay_data['approval_number'] ?? '',
       'approved_at' => $pay_data['approved_at'] ?? '',
-      'amount' => $pay_data['amount'] ?? (int)$amount,
+      'amount' => (int)$pay_data['amount'] ?? (int)$amount,
       'goods_name' => $goodsName,
       'buyer_name' => $buyerName,
       'card_masked' => $pay_data['card_no_masked'] ?? '',
       'receipt_url' => $pay_data['receipt_url'] ?? '',
       'result_message' => $result['message'] ?? '',
-      'status' => $status,
+      'status' => $status
     ]);
     $logger->info('Payment record inserted', ['id' => $insertId, 'status' => $status]);
-} catch (Exception $e) {
+} catch (\Throwable $e) {
+    error_log('[pay_submit] DB insert failed: ' . $e->getMessage()); // PHP error.log에도 기록
     $logger->error('Payment insert failed', ['exception' => $e->getMessage()]);
-    // 실패 처리
 }
 
 // 4. DB 연결 설정 (mysqli)
