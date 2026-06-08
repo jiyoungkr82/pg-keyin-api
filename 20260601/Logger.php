@@ -1,9 +1,7 @@
 <?php
-use Logger;
-
 require_once __DIR__ . '/vendor/autoload.php';
 
-function get_logger(string $name = 'pay_submit') 
+function get_logger(string $name = 'pay_submit')
 {
     static $initialized = false;
     
